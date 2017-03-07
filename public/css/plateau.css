@@ -153,5 +153,9 @@ filter: alpha(opacity = 50);
 @media all and (max-device-width: 480px)
 {
   /* Vos règles CSS pour les mobiles ici */
-
+    .ref{
+      background-color:gray;
+      height:20px;
+      width:20px;
+    }
 }
