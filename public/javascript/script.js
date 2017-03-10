@@ -64,7 +64,7 @@ var socket = io.connect('http://localhost:3000');
 
     Pioche = new Array([0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15],[9,9,8,8,7,8,6,6,4,4,3,3,2,2,1,1]);
 
-    $('#bouton').click(function piocheAuto(){
+    $('#bouton').click(function piocheAuto(){/////////// Bouton fin de tour
 
       var  childs = document.getElementById("main").childNodes;
       if(childs.length!=4){
@@ -72,6 +72,32 @@ var socket = io.connect('http://localhost:3000');
           ajouteElement();
         }while(childs.length!==4);
       }
+
+      var valeur=0;
+
+      if(tab3[2]!=null){
+        valeur = tab3[0].getVal()*tab3[0].getMul()+tab3[1].getVal()*tab3[1].getMul()+tab3[2].getVal()*tab3[2].getMul();
+      }
+      else{
+        if(tab3[1]!=null){
+          valeur = tab3[0].getVal()*tab3[0].getMul()+tab3[1].getVal()*tab3[1].getMul();
+        }
+        else{
+          if(tab3[0]!=null){
+            valeur = tab3[0].getVal()*tab3[0].getMul();
+        }
+      }
+    }
+      joueuractuel.actualiserScore(valeur);
+      refreshScore(joueuractuel, joueur2, joueur3, joueur4);
+
+
+
+      console.log(tab3);
+      tab3[0] = null;
+      tab3[1] = null;
+      tab3[2] = null;
+      console.log(tab3);
       joueuractuel.switchTour(joueur2, joueur3, joueur4);
     });
 
@@ -280,66 +306,200 @@ var socket = io.connect('http://localhost:3000');
             if(plateau[7][7].getVal()!=null || (abs == 7 && ord == 7)){
               if(CaseAutour(ord,abs)!=0 || (abs == 7 && ord == 7)){
                 if(alignementordbas(ord,abs)==true && alignementordhaut(ord,abs)==true && alignementabsgauche(ord,abs)==true && alignementabsdroite(ord,abs)==true){
-                //plateau[ord][abs].setVal(1);
 
-                var nbCaseR = CaseAutour(ord,abs);
-                console.log("nb case remplit : "+ nbCaseR);
 
-                var target = e.target,
-                draggedElement = dndHandler.draggedElement, // Récupération de l'élément concerné
-                clonedElement = draggedElement.cloneNode(true); // On créé immédiatement le clone de cet élément
+                if(tab3[1]!=null && tab3[2]==null){
 
-                var elemDropped = $(draggedElement).attr('id');
-                var destination = $(target).attr('id');
-                socket.emit('idelements', elemDropped, destination);
+                      var nbCaseR = CaseAutour(ord,abs);
+                      console.log("nb case remplit : "+ nbCaseR);
 
-                while(target.className.indexOf('dropper') == -1) { // Cette boucle permet de remonter jusqu'à la zone de drop parente
-                target = target.parentNode;
+                      var target = e.target,
+                      draggedElement = dndHandler.draggedElement, // Récupération de l'élément concerné
+                      clonedElement = draggedElement.cloneNode(true); // On créé immédiatement le clone de cet élément
 
-              }
+                      var elemDropped = $(draggedElement).attr('id');
+                      var destination = $(target).attr('id');
+                      socket.emit('idelements', elemDropped, destination);
 
-              //target.className = 'dropper'; // Application du design par défaut
-              var classeCible = target.getAttribute('class');
-              console.log(classeCible);
-              /* INUTILE
-              if(classeCible.indexOf("bis")!=-1){
-                target.className = 'bis';
-              }
-              else{
-                if(classeCible.indexOf("double")!=-1){
-                  target.className = 'double';
+                      while(target.className.indexOf('dropper') == -1) { // Cette boucle permet de remonter jusqu'à la zone de drop parente
+                        target = target.parentNode;
+                      }
+
+                    //target.className = 'dropper'; // Application du design par défaut
+                    var classeCible = target.getAttribute('class');
+                    console.log(classeCible);
+                    /* INUTILE
+                    if(classeCible.indexOf("bis")!=-1){
+                      target.className = 'bis';
+                    }
+                    else{
+                      if(classeCible.indexOf("double")!=-1){
+                        target.className = 'double';
+                      }
+                      else{
+                        if(classeCible.indexOf("triple")!=-1){
+                          target.className = 'triple';
+                        }
+                        else{
+                          if(classeCible.indexOf("centre")!=-1){
+                            target.className = 'centre';
+                          }
+                          else {
+                            target.className = '';
+                          }
+                        }
+                      }
+                    }
+                    */
+                    /// ici retirer classe draged a la case qui a recu l'element
+                    plateau[ord][abs].setVal(draggedElement.getAttribute("value"));
+                    console.log("case plateau :"+plateau[ord][abs].getVal());
+                    ///
+                    clonedElement = target.appendChild(clonedElement); // Ajout de l'élément cloné à la zone de drop actuelle
+                    dndHandler.applyDragEvents(clonedElement); // Nouvelle application des événements qui ont été perdus lors du cloneNode()
+                    clonedElement.setAttribute('draggable', 'false');
+                    draggedElement.parentNode.removeChild(draggedElement); // Suppression de l'élément d'origine
+
+
+
+
+
+                    //triTableau(joueuractuel, joueur2, joueur3, joueur4);
+
+                    tab3[2] = new Case(ord,abs,plateau[ord][abs].getVal(),plateau[ord][abs].getMul());
+
+                    console.log("piece3");
+                    console.log(tab3[2] + " val = "+ tab3[2].getVal());
+                }
+
+                if(tab3[0] != null && tab3[1]==null){
+                  var nbCaseR = CaseAutour(ord,abs);
+                  console.log("nb case remplit : "+ nbCaseR);
+
+                  var target = e.target,
+                  draggedElement = dndHandler.draggedElement, // Récupération de l'élément concerné
+                  clonedElement = draggedElement.cloneNode(true); // On créé immédiatement le clone de cet élément
+
+                  var elemDropped = $(draggedElement).attr('id');
+                  var destination = $(target).attr('id');
+                  socket.emit('idelements', elemDropped, destination);
+
+                  while(target.className.indexOf('dropper') == -1) { // Cette boucle permet de remonter jusqu'à la zone de drop parente
+                    target = target.parentNode;
+                  }
+
+                //target.className = 'dropper'; // Application du design par défaut
+                var classeCible = target.getAttribute('class');
+                console.log(classeCible);
+                /* INUTILE
+                if(classeCible.indexOf("bis")!=-1){
+                  target.className = 'bis';
                 }
                 else{
-                  if(classeCible.indexOf("triple")!=-1){
-                    target.className = 'triple';
+                  if(classeCible.indexOf("double")!=-1){
+                    target.className = 'double';
                   }
                   else{
-                    if(classeCible.indexOf("centre")!=-1){
-                      target.className = 'centre';
+                    if(classeCible.indexOf("triple")!=-1){
+                      target.className = 'triple';
                     }
-                    else {
-                      target.className = '';
+                    else{
+                      if(classeCible.indexOf("centre")!=-1){
+                        target.className = 'centre';
+                      }
+                      else {
+                        target.className = '';
+                      }
                     }
                   }
                 }
-              }
-              */
-              /// ici retirer classe draged a la case qui a recu l'element
-              plateau[ord][abs].setVal(draggedElement.getAttribute("value"));
-              console.log("case plateau :"+plateau[ord][abs].getVal());
-              ///
-              clonedElement = target.appendChild(clonedElement); // Ajout de l'élément cloné à la zone de drop actuelle
-              dndHandler.applyDragEvents(clonedElement); // Nouvelle application des événements qui ont été perdus lors du cloneNode()
-              clonedElement.setAttribute('draggable', 'false');
-              draggedElement.parentNode.removeChild(draggedElement); // Suppression de l'élément d'origine
+                */
+                /// ici retirer classe draged a la case qui a recu l'element
+                plateau[ord][abs].setVal(draggedElement.getAttribute("value"));
+                console.log("case plateau :"+plateau[ord][abs].getVal());
+                ///
+                clonedElement = target.appendChild(clonedElement); // Ajout de l'élément cloné à la zone de drop actuelle
+                dndHandler.applyDragEvents(clonedElement); // Nouvelle application des événements qui ont été perdus lors du cloneNode()
+                clonedElement.setAttribute('draggable', 'false');
+                draggedElement.parentNode.removeChild(draggedElement); // Suppression de l'élément d'origine
 
-              var valeur=$(target).children().attr('value');
-              //alert(valeur+abs+ord);
-              joueuractuel.actualiserScore(valeur);
-              refreshScore(joueuractuel, joueur2, joueur3, joueur4);
-              //triTableau(joueuractuel, joueur2, joueur3, joueur4);
-            }else
-            alert("trois pieces d'affilé");
+
+
+
+
+                //triTableau(joueuractuel, joueur2, joueur3, joueur4);
+
+                tab3[1] = new Case(ord,abs,plateau[ord][abs].getVal(),plateau[ord][abs].getMul());
+                console.log("Piece2");
+                console.log(tab3[1]);
+                }
+
+                if(tab3[0]==null){
+                  var nbCaseR = CaseAutour(ord,abs);
+                  console.log("nb case remplit : "+ nbCaseR);
+
+                  var target = e.target,
+                  draggedElement = dndHandler.draggedElement, // Récupération de l'élément concerné
+                  clonedElement = draggedElement.cloneNode(true); // On créé immédiatement le clone de cet élément
+
+                  var elemDropped = $(draggedElement).attr('id');
+                  var destination = $(target).attr('id');
+                  socket.emit('idelements', elemDropped, destination);
+
+                  while(target.className.indexOf('dropper') == -1) { // Cette boucle permet de remonter jusqu'à la zone de drop parente
+                    target = target.parentNode;
+                  }
+
+                //target.className = 'dropper'; // Application du design par défaut
+                var classeCible = target.getAttribute('class');
+                console.log(classeCible);
+                /* INUTILE
+                if(classeCible.indexOf("bis")!=-1){
+                  target.className = 'bis';
+                }
+                else{
+                  if(classeCible.indexOf("double")!=-1){
+                    target.className = 'double';
+                  }
+                  else{
+                    if(classeCible.indexOf("triple")!=-1){
+                      target.className = 'triple';
+                    }
+                    else{
+                      if(classeCible.indexOf("centre")!=-1){
+                        target.className = 'centre';
+                      }
+                      else {
+                        target.className = '';
+                      }
+                    }
+                  }
+                }
+                */
+                /// ici retirer classe draged a la case qui a recu l'element
+                plateau[ord][abs].setVal(draggedElement.getAttribute("value"));
+                console.log("case plateau :"+plateau[ord][abs].getVal());
+                ///
+                clonedElement = target.appendChild(clonedElement); // Ajout de l'élément cloné à la zone de drop actuelle
+                dndHandler.applyDragEvents(clonedElement); // Nouvelle application des événements qui ont été perdus lors du cloneNode()
+                clonedElement.setAttribute('draggable', 'false');
+                draggedElement.parentNode.removeChild(draggedElement); // Suppression de l'élément d'origine
+
+
+
+
+
+                //triTableau(joueuractuel, joueur2, joueur3, joueur4);
+
+                tab3[0] = new Case(ord,abs,plateau[ord][abs].getVal(),plateau[ord][abs].getMul());
+                console.log("Piece1");
+                console.log(tab3[0]);
+                }
+
+
+
+                }else
+                alert("trois pieces d'affilé");
               }
               else{
               alert("Les pieces doivent etre adjacente");
@@ -712,6 +872,13 @@ function Case(abscisse, ordonnee, valeur, multiplicateur) {
 
 };
 
+function Piece(abs,ord,val,multi){
+  this.abscisse = abscisse;
+  this.ordonnee = ordonnee;
+  this.valeur = valeur;
+  this.multiplicateur = multiplicateur;
+}
+
 Case.prototype.getAbs = function(){
   return this.abscisse;
 };
@@ -752,6 +919,12 @@ var joueur3 = new Joueur("Antoine", null);
 var joueur4 = new Joueur("Maxime", null);
 
 //Case(ordonnée, abscisse, valeur, multiplicateur)
+var tab3 = new Array(3)
+tab3[0] = null;
+tab3[1] = null;
+tab3[2] = null;
+
+console.log("tab3 = "+ tab3)
 
 var plateau = new Array(15)
 plateau[0] = new Array(
