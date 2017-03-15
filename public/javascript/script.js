@@ -77,28 +77,79 @@ var socket = io.connect('http://localhost:3000');
 
       if(tab3[2]!=null){
         valeur = tab3[0].getVal()*tab3[0].getMul()+tab3[1].getVal()*tab3[1].getMul()+tab3[2].getVal()*tab3[2].getMul();
+        joueuractuel.actualiserScore(valeur);
+        refreshScore(joueuractuel, joueur2, joueur3, joueur4);
+
+        if(tab3[0].getBis()==true || tab3[1].getBis()==true || tab3[2].getBis()==true )
+        {
+          console.log(tab3);
+          tab3[0] = null;
+          tab3[1] = null;
+          tab3[2] = null;
+          console.log(tab3);
+          alert("Le joueur a posé une piece sur une case spécial, il rejoue !")
+        }
+        else{
+          console.log(tab3);
+          tab3[0] = null;
+          tab3[1] = null;
+          tab3[2] = null;
+          console.log(tab3);
+          joueuractuel.switchTour(joueur2, joueur3, joueur4);
+        }
       }
       else{
         if(tab3[1]!=null){
           valeur = tab3[0].getVal()*tab3[0].getMul()+tab3[1].getVal()*tab3[1].getMul();
+          joueuractuel.actualiserScore(valeur);
+          refreshScore(joueuractuel, joueur2, joueur3, joueur4);
+
+          if(tab3[0].getBis()==true || tab3[1].getBis()==true || tab3[2].getBis()==true )
+          {
+            console.log(tab3);
+            tab3[0] = null;
+            tab3[1] = null;
+            tab3[2] = null;
+            console.log(tab3);
+            alert("Le joueur a posé une piece sur une case spécial, il rejoue !")
+          }
+          else{
+            console.log(tab3);
+            tab3[0] = null;
+            tab3[1] = null;
+            tab3[2] = null;
+            console.log(tab3);
+            joueuractuel.switchTour(joueur2, joueur3, joueur4);
+          }
         }
         else{
           if(tab3[0]!=null){
             valeur = tab3[0].getVal()*tab3[0].getMul();
+            joueuractuel.actualiserScore(valeur);
+            refreshScore(joueuractuel, joueur2, joueur3, joueur4);
+
+            if(tab3[0].getBis()==true || tab3[1].getBis()==true || tab3[2].getBis()==true)
+            {
+              console.log(tab3);
+              tab3[0] = null;
+              tab3[1] = null;
+              tab3[2] = null;
+              console.log(tab3);
+              alert("Le joueur a posé une piece sur une case spécial, il rejoue !")
+            }
+            else{
+              console.log(tab3);
+              tab3[0] = null;
+              tab3[1] = null;
+              tab3[2] = null;
+              console.log(tab3);
+              joueuractuel.switchTour(joueur2, joueur3, joueur4);
+            }
         }
       }
     }
-      joueuractuel.actualiserScore(valeur);
-      refreshScore(joueuractuel, joueur2, joueur3, joueur4);
 
 
-
-      console.log(tab3);
-      tab3[0] = null;
-      tab3[1] = null;
-      tab3[2] = null;
-      console.log(tab3);
-      joueuractuel.switchTour(joueur2, joueur3, joueur4);
     });
 
     function ajouteElement() {
@@ -196,7 +247,22 @@ var socket = io.connect('http://localhost:3000');
       }else return true;
 
     }
+    /*
+    function condiP2(p1,abs,ord){
 
+      if((Math.abs(p1.getAbs()-abs)==1 || p1.getAbs()-abs==0) && (Math.abs(p1.getOrd()-ord)==1 || p1.getOrd()-ord==0)){
+          if(Math.abs(p1.getAbs()-abs)==Math.abs(p1.getOrd()-ord)){
+              return false;
+          }
+          else{
+            return true;
+          }
+        }
+      else{
+        return false;
+      }
+    }
+    */
 
 
 
@@ -308,7 +374,7 @@ var socket = io.connect('http://localhost:3000');
                 if(alignementordbas(ord,abs)==true && alignementordhaut(ord,abs)==true && alignementabsgauche(ord,abs)==true && alignementabsdroite(ord,abs)==true){
 
 
-                if(tab3[1]!=null && tab3[2]==null){
+                if(tab3[1]!=null && tab3[2]==null){ /// PIECE 3 Les pieces doivent rester dans ce sens d'insertion afin de ne pas déranger les condition présente dans le programme
 
                       var nbCaseR = CaseAutour(ord,abs);
                       console.log("nb case remplit : "+ nbCaseR);
@@ -366,13 +432,24 @@ var socket = io.connect('http://localhost:3000');
 
                     //triTableau(joueuractuel, joueur2, joueur3, joueur4);
 
-                    tab3[2] = new Case(ord,abs,plateau[ord][abs].getVal(),plateau[ord][abs].getMul());
+                    tab3[2] = new Case(ord,abs,plateau[ord][abs].getVal(),plateau[ord][abs].getMul(),plateau[ord][abs].getBis());
 
                     console.log("piece3");
                     console.log(tab3[2] + " val = "+ tab3[2].getVal());
                 }
 
-                if(tab3[0] != null && tab3[1]==null){
+                if(tab3[0] != null && tab3[1]==null){ /// PIECE 2
+
+                  // condition a terminer
+                  /*
+                  if(condiP2(tab3[0],ord,abs)){
+                    alert("true");
+                  }
+                  else{
+                    alert("false");
+                  }
+                  */
+                  //
                   var nbCaseR = CaseAutour(ord,abs);
                   console.log("nb case remplit : "+ nbCaseR);
 
@@ -429,12 +506,16 @@ var socket = io.connect('http://localhost:3000');
 
                 //triTableau(joueuractuel, joueur2, joueur3, joueur4);
 
-                tab3[1] = new Case(ord,abs,plateau[ord][abs].getVal(),plateau[ord][abs].getMul());
+                tab3[1] = new Case(ord,abs,plateau[ord][abs].getVal(),plateau[ord][abs].getMul(),plateau[ord][abs].getBis());
                 console.log("Piece2");
                 console.log(tab3[1]);
+
+
+
+
                 }
 
-                if(tab3[0]==null){
+                if(tab3[0]==null){  /// PIECE 1
                   var nbCaseR = CaseAutour(ord,abs);
                   console.log("nb case remplit : "+ nbCaseR);
 
@@ -491,7 +572,7 @@ var socket = io.connect('http://localhost:3000');
 
                 //triTableau(joueuractuel, joueur2, joueur3, joueur4);
 
-                tab3[0] = new Case(ord,abs,plateau[ord][abs].getVal(),plateau[ord][abs].getMul());
+                tab3[0] = new Case(ord,abs,plateau[ord][abs].getVal(),plateau[ord][abs].getMul(),plateau[ord][abs].getBis());
                 console.log("Piece1");
                 console.log(tab3[0]);
                 }
@@ -863,21 +944,23 @@ Pion.prototype.setVal = function(val){
 
 
 
-function Case(abscisse, ordonnee, valeur, multiplicateur) {
+function Case(abscisse, ordonnee, valeur, multiplicateur, bis) {
 
   this.abscisse = abscisse;
   this.ordonnee = ordonnee;
   this.valeur = valeur;
   this.multiplicateur = multiplicateur;
+  this.bis = bis;
 
 };
 
-function Piece(abs,ord,val,multi){
-  this.abscisse = abscisse;
-  this.ordonnee = ordonnee;
-  this.valeur = valeur;
-  this.multiplicateur = multiplicateur;
-}
+Case.prototype.getBis = function(){
+  return this.bis;
+};
+
+Case.prototype.setBis = function(bis){
+  this.bis=bis;
+};
 
 Case.prototype.getAbs = function(){
   return this.abscisse;
@@ -928,93 +1011,93 @@ console.log("tab3 = "+ tab3)
 
 var plateau = new Array(15)
 plateau[0] = new Array(
-  new Case(0,0, null, 1), new Case(0,1, null, 1), new Case(0,2, null, 1), new Case(0,3, null, 1), new Case(0,4, null, 1),
-  new Case(0,5, null, 1), new Case(0,6, null, 1), new Case(0,7, null, 2), new Case(0,8, null, 1), new Case(0,9, null, 1),
-  new Case(0,10, null, 1), new Case(0,11, null, 1), new Case(0,12, null, 1), new Case(0,13, null, 2), new Case(0,14, null, 1)
+  new Case(0,0, null, 1, false), new Case(0,1, null, 1, false), new Case(0,2, null, 1, false), new Case(0,3, null, 1, false), new Case(0,4, null, 1, false),
+  new Case(0,5, null, 1, false), new Case(0,6, null, 1, false), new Case(0,7, null, 2, true), new Case(0,8, null, 1, false), new Case(0,9, null, 1, false),
+  new Case(0,10, null, 1, false), new Case(0,11, null, 1, false), new Case(0,12, null, 1, false), new Case(0,13, null, 2, false), new Case(0,14, null, 1, false)
 );
 
 plateau[1] = new Array(
-  new Case(1,0, null, 1), new Case(1,1, null, 2), new Case(1,2, null, 1), new Case(1,3, null, 1), new Case(1,4, null, 3),
-  new Case(1,5, null, 1), new Case(1,6, null, 1), new Case(1,7, null, 1), new Case(1,8, null, 1), new Case(1,9, null, 1),
-  new Case(1,10, null, 3), new Case(1,11, null, 1), new Case(1,12, null, 1), new Case(1,13, null, 2), new Case(1,14, null, 1)
+  new Case(1,0, null, 1, false), new Case(1,1, null, 2, true), new Case(1,2, null, 1, false), new Case(1,3, null, 1, false), new Case(1,4, null, 3, false),
+  new Case(1,5, null, 1, false), new Case(1,6, null, 1, false), new Case(1,7, null, 1, false), new Case(1,8, null, 1, false), new Case(1,9, null, 1, false),
+  new Case(1,10, null, 3, false), new Case(1,11, null, 1, false), new Case(1,12, null, 1, false), new Case(1,13, null, 2, true), new Case(1,14, null, 1, false)
 );
 
 plateau[2] = new Array(
-  new Case(2,0, null, 1), new Case(2,1, null, 1), new Case(2,2, null, 1), new Case(2,3, null, 1), new Case(2,4, null, 1),
-  new Case(2,5, null, 1), new Case(2,6, null, 1), new Case(2,7, null, 1), new Case(2,8, null, 1), new Case(2,9, null, 1),
-  new Case(2,10, null, 1), new Case(2,11, null, 1), new Case(2,12, null, 1), new Case(2,13, null, 1), new Case(2,14, null, 1)
+  new Case(2,0, null, 1, false), new Case(2,1, null, 1, false), new Case(2,2, null, 1, false), new Case(2,3, null, 1, false), new Case(2,4, null, 1, false),
+  new Case(2,5, null, 1, false), new Case(2,6, null, 1, false), new Case(2,7, null, 1, false), new Case(2,8, null, 1, false), new Case(2,9, null, 1, false),
+  new Case(2,10, null, 1, false), new Case(2,11, null, 1, false), new Case(2,12, null, 1, false), new Case(2,13, null, 1, false), new Case(2,14, null, 1, false)
 );
 
 plateau[3] = new Array(
-  new Case(3,0, null, 1), new Case(3,1, null, 1), new Case(3,2, null, 1), new Case(3,3, null, 1), new Case(3,4, null, 1),
-  new Case(3,5, null, 1), new Case(3,6, null, 1), new Case(3,7, null, 2), new Case(3,8, null, 1), new Case(3,9, null, 1),
-  new Case(3,10, null, 1), new Case(3,11, null, 1), new Case(3,12, null, 1), new Case(3,13, null, 1), new Case(3,14, null, 1)
+  new Case(3,0, null, 1, false), new Case(3,1, null, 1, false), new Case(3,2, null, 1, false), new Case(3,3, null, 1, false), new Case(3,4, null, 1, false),
+  new Case(3,5, null, 1, false), new Case(3,6, null, 1, false), new Case(3,7, null, 2, false), new Case(3,8, null, 1, false), new Case(3,9, null, 1, false),
+  new Case(3,10, null, 1, false), new Case(3,11, null, 1, false), new Case(3,12, null, 1, false), new Case(3,13, null, 1, false), new Case(3,14, null, 1, false)
 );
 
 plateau[4] = new Array(
-  new Case(4,0, null, 1), new Case(4,1, null, 3), new Case(4,2, null, 1), new Case(4,3, null, 1), new Case(4,4, null, 2),
-  new Case(4,5, null, 1), new Case(4,6, null, 1), new Case(4,7, null, 1), new Case(4,8, null, 1), new Case(4,9, null, 1),
-  new Case(4,10, null, 2), new Case(4,11, null, 1), new Case(4,12, null, 1), new Case(4,13, null, 3), new Case(4,14, null, 1)
+  new Case(4,0, null, 1, false), new Case(4,1, null, 3, false), new Case(4,2, null, 1, false), new Case(4,3, null, 1, false), new Case(4,4, null, 2, false),
+  new Case(4,5, null, 1, false), new Case(4,6, null, 1, false), new Case(4,7, null, 1, false), new Case(4,8, null, 1, false), new Case(4,9, null, 1, false),
+  new Case(4,10, null, 2, false), new Case(4,11, null, 1, false), new Case(4,12, null, 1, false), new Case(4,13, null, 3, false), new Case(4,14, null, 1, false)
 );
 
 plateau[5] = new Array(
-  new Case(5,0, null, 1), new Case(5,1, null, 1), new Case(5,2, null, 1), new Case(5,3, null, 1), new Case(5,4, null, 1),
-  new Case(5,5, null, 1), new Case(5,6, null, 1), new Case(5,7, null, 1), new Case(5,8, null, 1), new Case(5,9, null, 1),
-  new Case(5,10, null, 1), new Case(5,11, null, 1), new Case(5,12, null, 1), new Case(5,13, null, 1), new Case(5,14, null, 1)
+  new Case(5,0, null, 1, false), new Case(5,1, null, 1, false), new Case(5,2, null, 1, false), new Case(5,3, null, 1, false), new Case(5,4, null, 1, false),
+  new Case(5,5, null, 1, false), new Case(5,6, null, 1, false), new Case(5,7, null, 1, false), new Case(5,8, null, 1, false), new Case(5,9, null, 1, false),
+  new Case(5,10, null, 1, false), new Case(5,11, null, 1, false), new Case(5,12, null, 1, false), new Case(5,13, null, 1, false), new Case(5,14, null, 1, false)
 );
 
 plateau[6] = new Array(
-  new Case(6,0, null, 1), new Case(6,1, null, 1), new Case(6,2, null, 1), new Case(6,3, null, 1), new Case(6,4, null, 1),
-  new Case(6,5, null, 1), new Case(6,6, null, 1), new Case(6,7, null, 1), new Case(6,8, null, 1), new Case(6,9, null, 1),
-  new Case(6,10, null, 1), new Case(6,11, null, 1), new Case(6,12, null, 1), new Case(6,13, null, 1), new Case(6,14, null, 1)
+  new Case(6,0, null, 1, false), new Case(6,1, null, 1, false), new Case(6,2, null, 1, false), new Case(6,3, null, 1, false), new Case(6,4, null, 1, false),
+  new Case(6,5, null, 1, false), new Case(6,6, null, 1, false), new Case(6,7, null, 1, false), new Case(6,8, null, 1, false), new Case(6,9, null, 1, false),
+  new Case(6,10, null, 1, false), new Case(6,11, null, 1, false), new Case(6,12, null, 1, false), new Case(6,13, null, 1, false), new Case(6,14, null, 1, false)
 );
 
 plateau[7] = new Array(
-  new Case(7,0, null, 2), new Case(7,1, null, 1), new Case(7,2, null, 1), new Case(7,3, null, 2), new Case(7,4, null, 1),
-  new Case(7,5, null, 1), new Case(7,6, null, 1), new Case(7,7, null, 2), new Case(7,8, null, 1), new Case(7,9, null, 1),
-  new Case(7,10, null, 1), new Case(7,11, null, 2), new Case(7,12, null, 1), new Case(7,13, null, 1), new Case(7,14, null, 2)
+  new Case(7,0, null, 2, true), new Case(7,1, null, 1, false), new Case(7,2, null, 1, false), new Case(7,3, null, 2, false), new Case(7,4, null, 1, false),
+  new Case(7,5, null, 1, false), new Case(7,6, null, 1, false), new Case(7,7, null, 2, false), new Case(7,8, null, 1, false), new Case(7,9, null, 1, false),
+  new Case(7,10, null, 1, false), new Case(7,11, null, 2, false), new Case(7,12, null, 1, false), new Case(7,13, null, 1, false), new Case(7,14, null, 2, true)
 );
 
 plateau[8] = new Array(
-  new Case(8,0, null, 1), new Case(8,1, null, 1), new Case(8,2, null, 1), new Case(8,3, null, 1), new Case(8,4, null, 1),
-  new Case(8,5, null, 1), new Case(8,6, null, 1), new Case(8,7, null, 1), new Case(8,8, null, 1), new Case(8,9, null, 1),
-  new Case(8,10, null, 1), new Case(8,11, null, 1), new Case(8,12, null, 1), new Case(8,13, null, 1), new Case(8,14, null, 1)
+  new Case(8,0, null, 1, false), new Case(8,1, null, 1, false), new Case(8,2, null, 1, false), new Case(8,3, null, 1, false), new Case(8,4, null, 1, false),
+  new Case(8,5, null, 1, false), new Case(8,6, null, 1, false), new Case(8,7, null, 1, false), new Case(8,8, null, 1, false), new Case(8,9, null, 1, false),
+  new Case(8,10, null, 1, false), new Case(8,11, null, 1, false), new Case(8,12, null, 1, false), new Case(8,13, null, 1, false), new Case(8,14, null, 1, false)
 );
 
 plateau[9] = new Array(
-  new Case(9,0, null, 1), new Case(9,1, null, 1), new Case(9,2, null, 1), new Case(9,3, null, 1), new Case(9,4, null, 1),
-  new Case(9,5, null, 1),	new Case(9,6, null, 1), new Case(9,7, null, 1), new Case(9,8, null, 1), new Case(9,9, null, 1),
-  new Case(9,10, null, 1), new Case(9,11, null, 1), new Case(9,12, null, 1), new Case(9,13, null, 1), new Case(9,14, null, 1)
+  new Case(9,0, null, 1, false), new Case(9,1, null, 1, false), new Case(9,2, null, 1, false), new Case(9,3, null, 1, false), new Case(9,4, null, 1, false),
+  new Case(9,5, null, 1, false),	new Case(9,6, null, 1, false), new Case(9,7, null, 1, false), new Case(9,8, null, 1, false), new Case(9,9, null, 1, false),
+  new Case(9,10, null, 1, false), new Case(9,11, null, 1, false), new Case(9,12, null, 1, false), new Case(9,13, null, 1, false), new Case(9,14, null, 1, false)
 );
 
 plateau[10] = new Array(
-  new Case(10,0, null, 1), new Case(10,1, null, 3), new Case(10,2, null, 1), new Case(10,3, null, 1), new Case(10,4, null, 2),
-  new Case(10,5, null, 1), new Case(10,6, null, 1), new Case(10,7, null, 1), new Case(10,8, null, 1), new Case(10,9, null, 1),
-  new Case(10,10, null, 2), new Case(10,11, null, 1), new Case(10,12, null, 1), new Case(10,13, null, 3), new Case(10,14, null, 1)
+  new Case(10,0, null, 1, false), new Case(10,1, null, 3, false), new Case(10,2, null, 1, false), new Case(10,3, null, 1, false), new Case(10,4, null, 2, false),
+  new Case(10,5, null, 1, false), new Case(10,6, null, 1, false), new Case(10,7, null, 1, false), new Case(10,8, null, 1, false), new Case(10,9, null, 1, false),
+  new Case(10,10, null, 2, false), new Case(10,11, null, 1, false), new Case(10,12, null, 1, false), new Case(10,13, null, 3, false), new Case(10,14, null, 1, false)
 );
 
 plateau[11] = new Array(
-  new Case(11,0, null, 1), new Case(11,1, null, 1), new Case(11,2, null, 1), new Case(11,3, null, 1), new Case(11,4, null, 1),
-  new Case(11,5, null, 1), new Case(11,6, null, 1), new Case(11,7, null, 2), new Case(11,8, null, 1), new Case(11,9, null, 1),
-  new Case(11,10, null, 1),	new Case(11,11, null, 1),12, new Case(11,12, null, 1), new Case(11,13, null, 1), new Case(11,14, null, 1)
+  new Case(11,0, null, 1, false), new Case(11,1, null, 1, false), new Case(11,2, null, 1, false), new Case(11,3, null, 1, false), new Case(11,4, null, 1, false),
+  new Case(11,5, null, 1, false), new Case(11,6, null, 1, false), new Case(11,7, null, 2, false), new Case(11,8, null, 1, false), new Case(11,9, null, 1, false),
+  new Case(11,10, null, 1, false),	new Case(11,11, null, 1, false),new Case(11,12, null, 1, false), new Case(11,13, null, 1, false), new Case(11,14, null, 1, false)
 );
 
 plateau[12] = new Array(
-  new Case(12,0, null, 1), new Case(12,1, null, 1), new Case(12,2, null, 1), new Case(12,3, null, 1), new Case(12,4, null, 1),
-  new Case(12,5, null, 1), new Case(12,6, null, 1), new Case(12,7, null, 1), new Case(12,8, null, 1), new Case(12,9, null, 1),
-  new Case(12,10, null, 1),	new Case(12,11, null, 1), new Case(12,12, null, 1), new Case(12,13, null, 1), new Case(12,14, null, 1)
+  new Case(12,0, null, 1, false), new Case(12,1, null, 1, false), new Case(12,2, null, 1, false), new Case(12,3, null, 1, false), new Case(12,4, null, 1, false),
+  new Case(12,5, null, 1, false), new Case(12,6, null, 1, false), new Case(12,7, null, 1, false), new Case(12,8, null, 1, false), new Case(12,9, null, 1, false),
+  new Case(12,10, null, 1, false),	new Case(12,11, null, 1, false), new Case(12,12, null, 1, false), new Case(12,13, null, 1, false), new Case(12,14, null, 1, false)
 );
 
 plateau[13] = new Array(
-  new Case(13,0, null, 1), new Case(13,1, null, 2), new Case(13,2, null, 1), new Case(13,3, null, 1), new Case(13,4, null, 3),
-  new Case(13,5, null, 1), new Case(13,6, null, 1), new Case(13,7, null, 1), new Case(13,8, null, 1), new Case(13,9, null, 1),
-  new Case(13,10, null, 3), new Case(13,11, null, 1), new Case(13,12, null, 1), new Case(13,13, null, 2), new Case(13,14, null, 1)
+  new Case(13,0, null, 1, false), new Case(13,1, null, 2, true), new Case(13,2, null, 1, false), new Case(13,3, null, 1, false), new Case(13,4, null, 3, false),
+  new Case(13,5, null, 1, false), new Case(13,6, null, 1, false), new Case(13,7, null, 1, false), new Case(13,8, null, 1, false), new Case(13,9, null, 1, false),
+  new Case(13,10, null, 3, false), new Case(13,11, null, 1, false), new Case(13,12, null, 1, false), new Case(13,13, null, 2, true), new Case(13,14, null, 1, false)
 );
 
 plateau[14] = new Array(
-  new Case(14,0, null, 1), new Case(14,1, null, 1), new Case(14,2, null, 1), new Case(14,3, null, 1), new Case(14,4, null, 1),
-  new Case(14,5, null, 1), new Case(14,6, null, 1), new Case(14,7, null, 2), new Case(14,8, null, 1), new Case(14,9, null, 1),
-  new Case(14,10, null, 1),	new Case(14,11, null, 1), new Case(14,12, null, 1), new Case(14,13, null, 1), new Case(14,14, null, 1)
+  new Case(14,0, null, 1, false), new Case(14,1, null, 1, false), new Case(14,2, null, 1, false), new Case(14,3, null, 1, false), new Case(14,4, null, 1, false),
+  new Case(14,5, null, 1, false), new Case(14,6, null, 1, false), new Case(14,7, null, 2, true), new Case(14,8, null, 1, false), new Case(14,9, null, 1, false),
+  new Case(14,10, null, 1, false),	new Case(14,11, null, 1, false), new Case(14,12, null, 1, false), new Case(14,13, null, 1, false), new Case(14,14, null, 1, false)
 );
 
 //alert(plateau[7][7].getAbs()+", "+plateau[7][7].getOrd()+", "+plateau[7][7].getVal()+", "+plateau[7][7].getMul());
