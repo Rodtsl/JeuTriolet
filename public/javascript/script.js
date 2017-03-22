@@ -86,7 +86,7 @@ var socket = io.connect('http://localhost:3000');
         valeur = (parseInt(tab3[0].getVal())+parseInt(tab3[1].getVal())+parseInt(tab3[2].getVal()))*(parseInt(tab3[0].getMul()*tab3[1].getMul()*tab3[2].getMul()));
         joueuractuel.actualiserScore(valeur);
         refreshScore(joueuractuel, joueur2, joueur3, joueur4);
-
+              bouclePio();
         if(tab3[0].getBis()==true || tab3[1].getBis()==true || tab3[2].getBis()==true )
         {
           console.log(tab3);
@@ -155,7 +155,7 @@ var socket = io.connect('http://localhost:3000');
             }
         }
       }
-      bouclePio();
+
     }
 
 
@@ -202,9 +202,12 @@ var socket = io.connect('http://localhost:3000');
     }
 
 
-
     function alignementabsgauche(ord, abs){
       var abs0 = parseInt(abs)-1;
+
+	  if(abs==0 || abs==1){
+		  return true;
+	  }
       if(plateau[ord][abs0].getVal()!=null){
         var abs0 = parseInt(abs)-2;
         if(plateau[ord][abs0].getVal()!=null){
@@ -219,6 +222,10 @@ var socket = io.connect('http://localhost:3000');
 
     function alignementabsdroite(ord, abs){
       var abs0 = parseInt(abs)+1;
+
+	  if(abs==13 || abs==14){
+		  return true;
+	  }
        if(plateau[ord][abs0].getVal()!=null){
          var abs0 = parseInt(abs)+2;
          if(plateau[ord][abs0].getVal()!=null){
@@ -233,6 +240,9 @@ var socket = io.connect('http://localhost:3000');
 
     function alignementordhaut(ord, abs){
       var ord0 = parseInt(ord)+1;
+	  if(ord==13 || ord==14){
+		  return true;
+	  }
       if(plateau[ord0][abs].getVal()!=null){
         var ord0 = parseInt(ord)+2;
         if(plateau[ord0][abs].getVal()!=null){
@@ -248,6 +258,9 @@ var socket = io.connect('http://localhost:3000');
     function alignementordbas(ord, abs){
 
       var ord0 = parseInt(ord)-1;
+	  if(ord==0 || ord==1){
+		  return true;
+	  }
       if(plateau[ord0][abs].getVal()!=null){
         var ord0 = parseInt(ord)-2;
         if(plateau[ord0][abs].getVal()!=null){
@@ -259,6 +272,7 @@ var socket = io.connect('http://localhost:3000');
       }else return true;
 
     }
+
 
     function condiP2(p1,abs,ord){
 
