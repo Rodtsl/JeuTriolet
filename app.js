@@ -103,7 +103,7 @@ socket.on('nouveau_client', function(pseudo) {
     socket.on('message', function (message) {
         message = ent.encode(message);
         socket.broadcast.emit('message', {pseudo: socket.pseudo, message: message});
-    }); 
+    });
 });
 
 /*io.sockets.on('connection', function (socket, pseudo) {
