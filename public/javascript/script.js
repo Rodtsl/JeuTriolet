@@ -267,6 +267,16 @@ var socket = io.connect('http://localhost:3000');
       }
     }
 
+    function condiP3(p1,p2,abs,ord){
+      if((p1.getOrd()-p2.getOrd()==p2.getOrd()-ord)&&(p1.getAbs()-p2.getAbs()==p2.getAbs()-abs)){
+        console.log("P3 aligné");
+        return true;
+      }
+      else{
+        console.log("P3 non aligné");
+        return false;
+      }
+    }
 
 
 
@@ -380,6 +390,7 @@ var socket = io.connect('http://localhost:3000');
 
                 if(tab3[1]!=null && tab3[2]==null){ /// PIECE 3 Les pieces doivent rester dans ce sens d'insertion afin de ne pas déranger les condition présente dans le programme
 
+                    if(condiP3(tab3[0],tab3[1],ord,abs)){
                       var nbCaseR = CaseAutour(ord,abs);
                       console.log("nb case remplit : "+ nbCaseR);
 
@@ -440,11 +451,15 @@ var socket = io.connect('http://localhost:3000');
 
                     console.log("piece3");
                     console.log(tab3[2] + " val = "+ tab3[2].getVal());
+                  }
+                  else{
+                    alert(" La troisieme piece doit etre dans l'alignement des deux premieres");
+                  }
                 }
 
                 if(tab3[0] != null && tab3[1]==null){ /// PIECE 2
 
-                  // condition a terminer
+
 
                   if(condiP2(tab3[0],ord,abs)){
 
