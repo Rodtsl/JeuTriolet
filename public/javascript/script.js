@@ -80,13 +80,13 @@ var socket = io.connect('http://localhost:3000');
 
 
       var valeur=0;
-
+            bouclePio();
       if(tab3[2]!=null){
         console.log(parseInt(tab3[0].getVal())+parseInt(tab3[1].getVal())+parseInt(tab3[2].getVal())+"x"+parseInt(tab3[0].getMul()*tab3[1].getMul()*tab3[2].getMul()));
         valeur = (parseInt(tab3[0].getVal())+parseInt(tab3[1].getVal())+parseInt(tab3[2].getVal()))*(parseInt(tab3[0].getMul()*tab3[1].getMul()*tab3[2].getMul()));
         joueuractuel.actualiserScore(valeur);
         refreshScore(joueuractuel, joueur2, joueur3, joueur4);
-              bouclePio();
+
         if(tab3[0].getBis()==true || tab3[1].getBis()==true || tab3[2].getBis()==true )
         {
           console.log(tab3);
