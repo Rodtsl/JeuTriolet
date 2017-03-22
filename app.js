@@ -6,8 +6,8 @@ var io = require('socket.io').listen(server);
 var ent = require('ent');
 var fs = require('fs');
 
-var server_port = process.env.OPENSHIFT_NODEJS_PORT || 3000;
-var server_ip_address = process.env.OPENSHIFT_NODEJS_IP|| "127.0.0.1" ;
+var server_port = process.env.PORT || 3000;
+var server_ip_address = process.env.IP|| "127.0.0.1" ;
 
 /*if (typeof  === "undefined") {
   //  Log errors on OpenShift but continue w/ 127.0.0.1 - this
@@ -93,6 +93,17 @@ socket.on('idelements', function(elemDropped, destination, value) {
 
 });
 // Dès qu'on reçoit un message, on récupère le pseudo de son auteur et on le transmet aux autres personnes
+socket.on('nouveau_client', function(pseudo) {
+        pseudo = ent.encode(pseudo);
+        socket.pseudo = pseudo;
+        socket.broadcast.emit('nouveau_client', pseudo);
+    });
+
+    // Dès qu'on reçoit un message, on récupère le pseudo de son auteur et on le transmet aux autres personnes
+    socket.on('message', function (message) {
+        message = ent.encode(message);
+        socket.broadcast.emit('message', {pseudo: socket.pseudo, message: message});
+    }); 
 });
 
 /*io.sockets.on('connection', function (socket, pseudo) {
@@ -109,6 +120,8 @@ message = ent.encode(message);
 socket.broadcast.emit('message', {pseudo: socket.pseudo, message: message});
 });
 });*/
+
+
 
 //server.listen(port,ip);
 //console.log('Server running on http://%s:%s', ip, port);

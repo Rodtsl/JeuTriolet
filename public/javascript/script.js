@@ -169,7 +169,7 @@ var socket = io.connect('http://localhost:3000');
         var  childs = document.getElementById("main").childNodes;
 
         if(childs.length==4){
-          alert("Vous avez déja 3 pieces dans votre main ! ");
+          alert("Vous avez déjà 3 pièces dans votre main ! ");
         }
 
         else{
@@ -464,7 +464,7 @@ var socket = io.connect('http://localhost:3000');
                     console.log(tab3[2] + " val = "+ tab3[2].getVal());
                   }
                   else{
-                    alert(" La troisieme piece doit etre dans l'alignement des deux premieres");
+                    alert(" La troisieme pièce doit etre dans l'alignement des deux premières");
                   }
                 }
 
@@ -542,7 +542,7 @@ var socket = io.connect('http://localhost:3000');
 
                   }
                   else{
-                      alert(" La seconde piece doit etre posé a côté de la premiere ");
+                      alert(" La seconde pièce doit etre posé a côté de la première ");
                   }
                 }
 
@@ -611,17 +611,17 @@ var socket = io.connect('http://localhost:3000');
 
 
                 }else
-                alert("trois pieces d'affilé");
+                alert("Maximum : 3 pièces alignés");
               }
               else{
-              alert("Les pieces doivent etre adjacente");
+              alert("Les pièces doivent être adjacente");
             }
         }
         else{
-          alert("Case centre en 1er");
+          alert("Pour commencer veuillez mettre la pièce au centre");
         }
         }else{
-          alert("La case est déja occupé");
+          alert("La case est déjà occupé");
         }
       });
 
@@ -1091,10 +1091,10 @@ Case.prototype.setMul = function(mul){
 
 //faire une fonctionn switch joueur
 
-var joueuractuel = new Joueur("Adrien", null);
-var joueur2 = new Joueur("Léopold", null);
-var joueur3 = new Joueur("Antoine", null);
-var joueur4 = new Joueur("Maxime", null);
+var joueuractuel = new Joueur("Joueur1", null);
+var joueur2 = new Joueur("Joueur2", null);
+var joueur3 = new Joueur("Joueur3", null);
+var joueur4 = new Joueur("Joueur4", null);
 
 //Case(ordonnée, abscisse, valeur, multiplicateur)
 var tab3 = new Array(3)
