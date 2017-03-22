@@ -98,13 +98,14 @@ var socket = io.connect('http://localhost:3000');
           joueuractuel.switchTour(joueur2, joueur3, joueur4);
         }
       }
-      else{
+      else{////////////////// PIOCHE CONDITION SCORE
+              /////////////// CONDITION
         if(tab3[1]!=null){
           valeur = tab3[0].getVal()*tab3[0].getMul()+tab3[1].getVal()*tab3[1].getMul();
           joueuractuel.actualiserScore(valeur);
           refreshScore(joueuractuel, joueur2, joueur3, joueur4);
 
-          if(tab3[0].getBis()==true || tab3[1].getBis()==true || tab3[2].getBis()==true )
+          if(tab3[0].getBis()==true || tab3[1].getBis()==true )
           {
             console.log(tab3);
             tab3[0] = null;
@@ -128,7 +129,7 @@ var socket = io.connect('http://localhost:3000');
             joueuractuel.actualiserScore(valeur);
             refreshScore(joueuractuel, joueur2, joueur3, joueur4);
 
-            if(tab3[0].getBis()==true || tab3[1].getBis()==true || tab3[2].getBis()==true)
+            if(tab3[0].getBis()==true)
             {
               console.log(tab3);
               tab3[0] = null;
@@ -247,14 +248,17 @@ var socket = io.connect('http://localhost:3000');
       }else return true;
 
     }
-    /*
+
     function condiP2(p1,abs,ord){
 
       if((Math.abs(p1.getAbs()-abs)==1 || p1.getAbs()-abs==0) && (Math.abs(p1.getOrd()-ord)==1 || p1.getOrd()-ord==0)){
           if(Math.abs(p1.getAbs()-abs)==Math.abs(p1.getOrd()-ord)){
+
+              console.log("diagonale");
               return false;
           }
           else{
+            console.log("ok");
             return true;
           }
         }
@@ -262,7 +266,7 @@ var socket = io.connect('http://localhost:3000');
         return false;
       }
     }
-    */
+
 
 
 
@@ -441,14 +445,12 @@ var socket = io.connect('http://localhost:3000');
                 if(tab3[0] != null && tab3[1]==null){ /// PIECE 2
 
                   // condition a terminer
-                  /*
+
                   if(condiP2(tab3[0],ord,abs)){
-                    alert("true");
-                  }
-                  else{
-                    alert("false");
-                  }
-                  */
+
+
+
+
                   //
                   var nbCaseR = CaseAutour(ord,abs);
                   console.log("nb case remplit : "+ nbCaseR);
@@ -512,7 +514,10 @@ var socket = io.connect('http://localhost:3000');
 
 
 
-
+                  }
+                  else{
+                      alert(" La seconde piece doit etre posé a côté de la premiere ");
+                  }
                 }
 
                 if(tab3[0]==null){  /// PIECE 1
