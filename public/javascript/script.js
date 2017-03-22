@@ -7,7 +7,7 @@ var socket = io.connect('http://localhost:3000');
     $('.dropper').each(function(){
       var abscisse = $(this).attr('abscisse');
       var ordonnee = $(this).attr('ordonnee');
-      var id = ordonnee+abscisse;
+      var id = parseInt(15*ordonnee)+parseInt(abscisse);
       console.log(id);
       $(this).attr('id',id);
     });
@@ -50,6 +50,7 @@ var socket = io.connect('http://localhost:3000');
       if(e.which == 13)
       {
         EnterGameCB();
+        bouclePio();
       }
     });
 
@@ -64,8 +65,7 @@ var socket = io.connect('http://localhost:3000');
 
     Pioche = new Array([0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15],[9,9,8,8,7,8,6,6,4,4,3,3,2,2,1,1]);
 
-    $('#bouton').click(function piocheAuto(){/////////// Bouton fin de tour
-
+    function bouclePio(){
       var  childs = document.getElementById("main").childNodes;
       if(childs.length!=4){
         do{
@@ -73,10 +73,17 @@ var socket = io.connect('http://localhost:3000');
         }while(childs.length!==4);
       }
 
+    }
+
+    $('#bouton').click(function piocheAuto(){/////////// Bouton fin de tour
+
+
+
       var valeur=0;
 
       if(tab3[2]!=null){
-        valeur = tab3[0].getVal()*tab3[0].getMul()+tab3[1].getVal()*tab3[1].getMul()+tab3[2].getVal()*tab3[2].getMul();
+        console.log(parseInt(tab3[0].getVal())+parseInt(tab3[1].getVal())+parseInt(tab3[2].getVal())+"x"+parseInt(tab3[0].getMul()*tab3[1].getMul()*tab3[2].getMul()));
+        valeur = (parseInt(tab3[0].getVal())+parseInt(tab3[1].getVal())+parseInt(tab3[2].getVal()))*(parseInt(tab3[0].getMul()*tab3[1].getMul()*tab3[2].getMul()));
         joueuractuel.actualiserScore(valeur);
         refreshScore(joueuractuel, joueur2, joueur3, joueur4);
 
@@ -101,7 +108,7 @@ var socket = io.connect('http://localhost:3000');
       else{////////////////// PIOCHE CONDITION SCORE
               /////////////// CONDITION
         if(tab3[1]!=null){
-          valeur = tab3[0].getVal()*tab3[0].getMul()+tab3[1].getVal()*tab3[1].getMul();
+          valeur = (parseInt(tab3[0].getVal())+parseInt(tab3[1].getVal()))*(parseInt(tab3[0].getMul()*tab3[1].getMul()));
           joueuractuel.actualiserScore(valeur);
           refreshScore(joueuractuel, joueur2, joueur3, joueur4);
 
@@ -148,6 +155,7 @@ var socket = io.connect('http://localhost:3000');
             }
         }
       }
+      bouclePio();
     }
 
 
@@ -192,6 +200,9 @@ var socket = io.connect('http://localhost:3000');
       //mon_div = document.getElementById("org_div1");
       //document.body.insertBefore(nouveauDiv, mon_div);
     }
+
+
+
     function alignementabsgauche(ord, abs){
       var abs0 = parseInt(abs)-1;
       if(plateau[ord][abs0].getVal()!=null){
@@ -639,16 +650,71 @@ var quitter = document.getElementById('boutonQuitter');
 
 quitter.onclick = function()
 {
-  var test=false;
-  test=confirm("Voulez-vous quitter ?");
-  if(test==false)
-  {
-    return false;
+  if(tab3[0]!=null){
+      var id = parseInt(15*tab3[0].getAbs())+parseInt(tab3[0].getOrd());
+      console.log("res id:"+ id );
+      var  childs = document.getElementById(id).childNodes;
+      //var  main = document.getElementById("main").childNodes;
+
+      console.log(childs);
+      childs.remove(); // suppréssion du html
+      plateau[tab3[0].getAbs()][tab3[0].getOrd()].setVal(null); // le plateau js est vidé
+      var e = document.createElement("div");
+      e.appendChild( document.createTextNode(tab3[0].getVal()) );
+      e.id = "pion";
+      e.className="draggable";
+      e.setAttribute('draggable', 'true');
+      e.setAttribute('value', tab3[0].getVal());
+      main.appendChild(e);
+
+      console.log(tab3[0]+" 0 "+tab3[0].getVal()+" Y="+tab3[0].getAbs()+" X="+tab3[0].getOrd());
+
+      tab3[0]=null;
   }
-  else
-  {
-    return true;
+
+  if(tab3[1]!=null){
+    var id = parseInt(15*tab3[1].getAbs())+parseInt(tab3[1].getOrd());
+    console.log("res id:"+ id );
+    var  childs = document.getElementById(id).childNodes;
+    console.log(childs);
+    childs.remove(); // suppréssion du html
+    plateau[tab3[1].getAbs()][tab3[1].getOrd()].setVal(null); // le plateau js est vidé
+    var e = document.createElement("div");
+    e.appendChild( document.createTextNode(tab3[1].getVal()) );
+    e.id = "pion";
+    e.className="draggable";
+    e.setAttribute('draggable', 'true');
+    e.setAttribute('value', tab3[1].getVal());
+    main.appendChild(e);
+
+    console.log(tab3[1]+" 0 "+tab3[1].getVal()+" Y="+tab3[1].getAbs()+" X="+tab3[1].getOrd());
+
+    tab3[1]=null;
   }
+
+  if(tab3[2]!=null){
+    var id = parseInt(15*tab3[2].getAbs())+parseInt(tab3[2].getOrd());
+    console.log("res id:"+ id );
+    var  childs = document.getElementById(id).childNodes;
+    console.log(childs);
+
+    childs.remove(); // suppréssion du html
+    plateau[tab3[2].getAbs()][tab3[2].getOrd()].setVal(null); // le plateau js est vidé
+    var e = document.createElement("div");
+    e.appendChild( document.createTextNode(tab3[2].getVal()) );
+    e.id = "pion";
+    e.className="draggable";
+    e.setAttribute('draggable', 'true');
+    e.setAttribute('value', tab3[2].getVal());
+    main.appendChild(e);
+
+    console.log(tab3[2]+" 0 "+tab3[2].getVal()+" Y="+tab3[2].getAbs()+" X="+tab3[2].getOrd());
+
+    tab3[2]=null;
+  }
+
+
+
 }
 
 function Joueur(nomjoueur, scorejoueur) {
@@ -928,7 +994,16 @@ this.valeur = valeur;
 this.multiplicateur = multiplicateur;
 
 };*/ //a faire----------------------------------------------
-
+Element.prototype.remove = function() {
+    this.parentElement.removeChild(this);
+}
+NodeList.prototype.remove = HTMLCollection.prototype.remove = function() {
+    for(var i = this.length - 1; i >= 0; i--) {
+        if(this[i] && this[i].parentElement) {
+            this[i].parentElement.removeChild(this[i]);
+        }
+    }
+}
 
 function Pion(abscisse, ordonnee, valeur) {
 
